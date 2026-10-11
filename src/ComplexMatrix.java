@@ -70,4 +70,28 @@ public class ComplexMatrix {
         }
         return sb.toString();
     }
+
+    public ComplexMatrix transpose() {
+        Complex[][] transpMatrix = new Complex[data[0].length][data.length];
+        for (int i = 0; i < data.length; ++i) {
+            for (int j = 0; j < data[0].length; ++j) {
+                transpMatrix[j][i] = data[i][j];
+            }
+        }
+        return new ComplexMatrix(transpMatrix);
+    }
+
+    public ComplexMatrix add(ComplexMatrix other) throws MatrixException {
+        if (data.length != other.getRows() || data[0].length != other.getCols()) {
+            throw new MatrixException("Нельзя сложить матрицы " + data.length + "x" + data[0].length + " и " +
+                    other.getRows() + "x" + other.getCols());
+        }
+        Complex[][] result = new Complex[data.length][data[0].length];
+        for (int i = 0; i < data.length; ++i) {
+            for (int j = 0; j < data[0].length; ++j) {
+                result[i][j] = data[i][j].add(other.data[i][j]);
+            }
+        }
+        return new ComplexMatrix(result);
+    }
 }

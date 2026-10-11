@@ -94,4 +94,22 @@ public class ComplexMatrix {
         }
         return new ComplexMatrix(result);
     }
+
+    public ComplexMatrix multiply(ComplexMatrix other) throws MatrixException {
+        if (data[0].length != other.getRows()) {
+            throw new MatrixException("Нельзя умножить матрицы " + data.length + "x" + data[0].length + " и " +
+                    other.getRows() + "x" + other.getCols());
+        }
+        Complex[][] result = new Complex[data.length][other.getCols()];
+        for (int i = 0; i < data.length; ++i) {
+            for (int j = 0; j < other.getCols(); ++j) {
+                Complex sum = new Complex(0, 0);
+                for (int k = 0; k < data[0].length; ++k) {
+                    sum = sum.add(data[i][k].multiply(other.data[k][j]));
+                }
+                result[i][j] = sum;
+            }
+        }
+        return new ComplexMatrix(result);
+    }
 }

@@ -1,7 +1,7 @@
 public class Complex {
     private final double re;
     private final double im;
-    private final double EPS = 1e-12;
+    private static final double EPS = 1e-12;
 
     public Complex(double re, double im) {
         this.re = re;

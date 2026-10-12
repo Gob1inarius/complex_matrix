@@ -1,7 +1,7 @@
 public class Complex {
     private final double re;
     private final double im;
-    private static final double EPS = 1e-12;
+    public static final double EPS = 1e-12;
 
     public Complex(double re, double im) {
         this.re = re;
@@ -22,7 +22,7 @@ public class Complex {
 
     public Complex divide(Complex other) {
         double denom = other.re * other.re + other.im * other.im;
-        if (Math.abs(denom) < EPS) {
+        if (other.abs() < EPS) {
             throw new ArithmeticException("Деление на ноль");
         }
         return new Complex((this.re * other.re + this.im * other.im) / denom,
@@ -44,5 +44,9 @@ public class Complex {
 
     public double getIm() {
         return im;
+    }
+
+    public double abs() {
+        return Math.hypot(re, im);
     }
 }

@@ -112,4 +112,44 @@ public class ComplexMatrix {
         }
         return new ComplexMatrix(result);
     }
+
+    public Complex determinant() throws MatrixException {
+        if (data.length != data[0].length) {
+            throw new MatrixException("Определитель может быть высчитан только для квадратных матриц. Текущий размер "
+                    + data.length + "x" + data[0].length);
+        }
+        int n = data.length;
+        Complex[][] w = new Complex[n][];
+        for (int i = 0; i < n; ++i) {
+            w[i] = data[i].clone();
+        }
+        Complex det = new Complex(1, 0);
+        for (int c = 0; c < n; ++c) {
+            double maxAbs = w[c][c].abs();
+            int index = c;
+            for (int r = c; r < n; ++r) {
+                if (w[r][c].abs() > maxAbs) {
+                    maxAbs = w[r][c].abs();
+                    index = r;
+                }
+            }
+            if (maxAbs < Complex.EPS) {
+                return new Complex(0, 0);
+            }
+            if (index != c) {
+                Complex[] tmp = w[c];
+                w[c] = w[index];
+                w[index] = tmp;
+                det = det.multiply(new Complex(-1, 0));
+            }
+            det = det.multiply(w[c][c]);
+            for (int r = c + 1; r < n; ++r) {
+                Complex multiplier = w[r][c].divide(w[c][c]);
+                for (int k = c; k < n; ++k) {
+                    w[r][k] = w[r][k].subtract(w[c][k].multiply(multiplier));
+                }
+            }
+        }
+        return det;
+    }
 }

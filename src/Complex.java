@@ -31,10 +31,12 @@ public class Complex {
 
     @Override
     public String toString() {
-        if (im >= 0) {
-            return re + " + " + im + "i";
+        double x = re + 0.0;
+        double y = im + 0.0;
+        if (y >= 0) {
+            return x + " + " + y + "i";
         } else {
-            return re + " - " + Math.abs(im) + "i";
+            return x + " - " + Math.abs(y) + "i";
         }
     }
 

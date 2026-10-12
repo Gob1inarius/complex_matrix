@@ -152,4 +152,72 @@ public class ComplexMatrix {
         }
         return det;
     }
+
+    public ComplexMatrix inverse() throws MatrixException {
+        if (data.length != data[0].length) {
+            throw new MatrixException("Матрица не квадратная");
+        }
+        int n = data.length;
+        Complex[][] w = new Complex[n][n * 2];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                w[i][j] = data[i][j];
+                if (i == j) {
+                    w[i][j + n] = new Complex(1, 0);
+                } else {
+                    w[i][j + n] = new Complex(0, 0);
+                }
+            }
+        }
+        for (int c = 0; c < n; ++c) {
+            double maxAbs = w[c][c].abs();
+            int index = c;
+            for (int r = c; r < n; ++r) {
+                if (w[r][c].abs() > maxAbs) {
+                    maxAbs = w[r][c].abs();
+                    index = r;
+                }
+            }
+            if (maxAbs < Complex.EPS) {
+                throw new MatrixException("Матрица вырождена");
+            }
+            if (index != c) {
+                Complex[] tmp = w[c];
+                w[c] = w[index];
+                w[index] = tmp;
+            }
+            Complex sup = w[c][c];
+            for (int k = 0; k < n * 2; ++k) {
+                w[c][k] = w[c][k].divide(sup);
+            }
+            for (int r = 0; r < n; ++r) {
+                if (r == c) {
+                    continue;
+                }
+                Complex multiplier = w[r][c];
+                for (int k = 0; k < n * 2; ++k) {
+                    w[r][k] = w[r][k].subtract(w[c][k].multiply(multiplier));
+                }
+            }
+        }
+        Complex[][] result = new Complex[n][n];
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                result[i][j] = w[i][j + n];
+            }
+        }
+        return new ComplexMatrix(result);
+    }
+
+    public ComplexMatrix divide(ComplexMatrix other) throws MatrixException {
+        if (other.getRows() != other.getCols()) {
+            throw new MatrixException("Делитель должен быть квадратной матрицей, а он "
+                    + other.getRows() + "x" + other.getCols());
+        }
+        if (data[0].length != other.getRows()) {
+            throw new MatrixException("Нельзя разделить матрицы " + data.length + "x" + data[0].length + " и "
+                    + other.getRows() + "x" + other.getCols());
+        }
+        return this.multiply(other.inverse());
+    }
 }

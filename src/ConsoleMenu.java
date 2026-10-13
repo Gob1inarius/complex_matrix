@@ -69,7 +69,26 @@ public class ConsoleMenu {
                             System.out.println("Ошибка: " + e.getMessage());
                         }
                         break;
-
+                    case 6:
+                        ComplexMatrix transp = chooseMatrix();
+                        show("Транспонированная матрица", transp.transpose());
+                        break;
+                    case 7:
+                        try {
+                            ComplexMatrix det = chooseMatrix();
+                            System.out.println("Детерминант: " + det.determinant());
+                        } catch (MatrixException e) {
+                            System.out.println("Ошибка: " + e.getMessage());
+                        }
+                        break;
+                    case 8:
+                        try {
+                            ComplexMatrix inv = chooseMatrix();
+                            show("Обратная матрица", inv.inverse());
+                        } catch (MatrixException e) {
+                            System.out.println("Ошибка: " + e.getMessage());
+                        }
+                        break;
                     case 9:
                         show("Матрица A", a);
                         show("Матрица B", b);
@@ -154,9 +173,9 @@ public class ConsoleMenu {
         System.out.println("3. A + B");
         System.out.println("4. A * B");
         System.out.println("5. A / B");
-        // System.out.println("6. Транспонирование");
-        // System.out.println("7. Определитель");
-        // System.out.println("8. Обратная матрица");
+        System.out.println("6. Транспонирование");
+        System.out.println("7. Определитель");
+        System.out.println("8. Обратная матрица");
         System.out.println("9. Показать матрицы");
         System.out.println("0. Выход\n");
     }
@@ -167,6 +186,27 @@ public class ConsoleMenu {
             System.out.println("Матрица не задана");
         } else {
             System.out.println(m);
+        }
+    }
+
+    private ComplexMatrix chooseMatrix() {
+        while (true) {
+            System.err.print("К какой матрице применить (A/B): ");
+            String choice = in.nextLine().trim().toUpperCase();
+            if (choice.equals("A")) {
+                if (a == null) {
+                    System.out.println("Матрица В не задана");
+                    return null;
+                }
+                return a;
+            } else if (choice.equals("B")) {
+                if (b == null) {
+                    System.out.println("Матрица В не задана");
+                    return null;
+                }
+                return b;
+            } else
+                System.out.println("Введите А или В");
         }
     }
 }

@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -11,8 +12,42 @@ public class ConsoleMenu {
     }
 
     public void run() {
-        ComplexMatrix m = readMatrix("A");
-        System.out.println(m);
+        try {
+            while (true) {
+                printMenu();
+                int choice = readInt("Пункт: ", 1);
+                System.out.println();
+                switch (choice) {
+                    case 1:
+                        a = readMatrix("A");
+                        break;
+                    case 2:
+                        b = readMatrix("B");
+                        break;
+                    case 3:
+                        System.out.println("Матрица A");
+                        if (a == null) {
+                            System.out.println("Не задана");
+                        } else {
+                            System.out.println(a);
+                        }
+                        System.out.println("Матрица B");
+                        if (b == null) {
+                            System.out.println("Не задана");
+                        } else {
+                            System.out.println(b);
+                        }
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        System.out.println("Нет такого пункта");
+                        break;
+                }
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("Ввод закончен. Выход");
+        }
     }
 
     private int readInt(String message, int min) {
@@ -74,5 +109,13 @@ public class ConsoleMenu {
             data[i] = readComplexRow(i + 1, cols);
         }
         return new ComplexMatrix(data);
+    }
+
+    private void printMenu() {
+        System.out.println("\n-=MENU=-");
+        System.out.println("1. Ввести A");
+        System.out.println("2. Ввести B");
+        System.out.println("3. Показать матрицы");
+        System.out.println("4. Выход\n");
     }
 }

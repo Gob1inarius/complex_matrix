@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class ConsoleMenu {
     private final Scanner in;
@@ -10,8 +11,8 @@ public class ConsoleMenu {
     }
 
     public void run() {
-        int n = readInt("Число: ", 1);
-        System.out.println("Получено: " + n);
+        ComplexMatrix m = readMatrix("A");
+        System.out.println(m);
     }
 
     private int readInt(String message, int min) {
@@ -29,5 +30,49 @@ public class ConsoleMenu {
                 System.out.println("Введите целое число");
             }
         }
+    }
+
+    private Complex[] readComplexRow(int rowNumber, int cols) {
+        while (true) {
+            System.out.print("Строка " + rowNumber + " (" + cols * 2 + " чисел вида re im для каждого элемента): ");
+            String str = in.nextLine();
+            StringTokenizer st = new StringTokenizer(str);
+            int complexNum = st.countTokens();
+            if (complexNum != cols * 2) {
+                System.out.println("Нужно ввести " + cols * 2 + " чисел. Введено: " + complexNum);
+                continue;
+            }
+            try {
+                Complex[] row = new Complex[cols];
+                for (int i = 0; i < cols; ++i) {
+                    double re = parseNumber(st.nextToken());
+                    double im = parseNumber(st.nextToken());
+                    row[i] = new Complex(re, im);
+                }
+                return row;
+            } catch (NumberFormatException e) {
+                System.out.println("Нужны конечные числа");
+            }
+        }
+    }
+
+    private double parseNumber(String token) {
+        token = token.replace(',', '.');
+        double num = Double.parseDouble(token);
+        if (Double.isNaN(num) || Double.isInfinite(num)) {
+            throw new NumberFormatException("Число должно быть конечным");
+        }
+        return num;
+    }
+
+    private ComplexMatrix readMatrix(String name) {
+        System.out.println("Матрица " + name);
+        int rows = readInt("Число строк: ", 1);
+        int cols = readInt("Число столбцов: ", 1);
+        Complex[][] data = new Complex[rows][];
+        for (int i = 0; i < rows; ++i) {
+            data[i] = readComplexRow(i + 1, cols);
+        }
+        return new ComplexMatrix(data);
     }
 }

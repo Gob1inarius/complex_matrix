@@ -1,3 +1,5 @@
+import java.util.Locale;
+
 public class Complex {
     private final double re;
     private final double im;
@@ -31,12 +33,12 @@ public class Complex {
 
     @Override
     public String toString() {
-        double x = re + 0.0;
-        double y = im + 0.0;
+        double x = clean(re);
+        double y = clean(im);
         if (y >= 0) {
-            return x + " + " + y + "i";
+            return fmt(x) + " + " + fmt(y) + "i";
         } else {
-            return x + " - " + Math.abs(y) + "i";
+            return fmt(x) + " - " + fmt(-y) + "i";
         }
     }
 
@@ -50,5 +52,13 @@ public class Complex {
 
     public double abs() {
         return Math.hypot(re, im);
+    }
+
+    private static double clean(double v) {
+        return Math.abs(v) < 0.00005 ? 0.0 : v;
+    }
+
+    private static String fmt(double v) {
+        return String.format(Locale.US, "%.4f", v);
     }
 }

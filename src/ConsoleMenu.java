@@ -71,11 +71,17 @@ public class ConsoleMenu {
                         break;
                     case 6:
                         ComplexMatrix transp = chooseMatrix();
+                        if (transp == null) {
+                            break;
+                        }
                         show("Транспонированная матрица", transp.transpose());
                         break;
                     case 7:
                         try {
                             ComplexMatrix det = chooseMatrix();
+                            if (det == null) {
+                                break;
+                            }
                             System.out.println("Детерминант: " + det.determinant());
                         } catch (MatrixException e) {
                             System.out.println("Ошибка: " + e.getMessage());
@@ -84,6 +90,9 @@ public class ConsoleMenu {
                     case 8:
                         try {
                             ComplexMatrix inv = chooseMatrix();
+                            if (inv == null) {
+                                break;
+                            }
                             show("Обратная матрица", inv.inverse());
                         } catch (MatrixException e) {
                             System.out.println("Ошибка: " + e.getMessage());
@@ -191,22 +200,22 @@ public class ConsoleMenu {
 
     private ComplexMatrix chooseMatrix() {
         while (true) {
-            System.err.print("К какой матрице применить (A/B): ");
+            System.out.print("К какой матрице применить (A/B): ");
             String choice = in.nextLine().trim().toUpperCase();
             if (choice.equals("A")) {
                 if (a == null) {
-                    System.out.println("Матрица В не задана");
+                    System.out.println("Матрица A не задана");
                     return null;
                 }
                 return a;
             } else if (choice.equals("B")) {
                 if (b == null) {
-                    System.out.println("Матрица В не задана");
+                    System.out.println("Матрица B не задана");
                     return null;
                 }
                 return b;
             } else
-                System.out.println("Введите А или В");
+                System.out.println("Введите A или B");
         }
     }
 }
